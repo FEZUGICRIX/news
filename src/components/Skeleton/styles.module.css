@@ -6,18 +6,17 @@
 
 .banner {
   width: 100%;
-  padding-top: 20%;
-  position: relative;
+  height: 192px;
 }
 
 .item {
   width: 100%;
-  height: 55px;
+  height: 65px;
 }
 
 .banner,
 .item {
-  background: linear-gradient(-90deg, #f0f0f0 0%, #f8f8f8 50%, #f0f0f0 100%);
+  background: linear-gradient(-90deg, #f1efef 0%, #faf6f6 50%, #f5f1f1 100%);
   background-size: 400% 400%;
   animation: pulse 1.2s ease-in-out infinite;
 }
