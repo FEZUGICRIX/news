@@ -4,10 +4,10 @@ import style from './styles.module.css';
 
 export const NewsBanner = ({ item }) => {
   return (
-    <div className={style.header}>
+    <div className={style.newsBanner}>
       <Image image={item?.image} />
-      <h3 className={style.header}>{item.title}</h3>
-      <p className={style.header}>
+      <h3>{item.title}</h3>
+      <p>
         {formatTimeAgo(item.published)} by {item.author}
       </p>
     </div>
