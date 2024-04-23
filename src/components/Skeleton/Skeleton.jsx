@@ -12,7 +12,7 @@ const Skeleton = ({ count, type }) => {
           ))}
         </ul>
       ) : (
-        <li className={style[itemType]}></li>
+        <li className={style.banner}></li>
       )}
     </>
   );

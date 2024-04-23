@@ -1,0 +1,20 @@
+.categories {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.item {
+  color: rgb(80, 76, 70);
+}
+
+.active {
+  background: #5c63c7;
+  color: #fff;
+}
