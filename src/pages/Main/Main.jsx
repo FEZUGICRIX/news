@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import style from './styles.module.css';
 
 import { getNews } from '../../api/apiNews';
+import useDebounce from '../../helpers/hooks/useDebounce';
 import { getCategories } from '../../api/apiNews';
 import { NewsBanner } from '../../components/NewsBanner/NewsBanner';
-import NewsList from '../../components/NewsList/NewsList';
 import Skeleton from '../../components/Skeleton/Skeleton'
 import Pagination from '../../components/Pagination/Pagination';
+import NewsList from '../../components/NewsList/NewsList';
 import Categories from '../../components/Categories/Categories';
+import Search from '../../components/Search/Search';
 
 export const Main = () => {
   const [news, setNews] = useState([]);
@@ -15,8 +17,11 @@ export const Main = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [keywords, setKeywords] = useState('')
   const totalPages = 10;
   const pageSize = 10;
+
+  const debouncedKeywords = useDebounce(keywords, 1500);
 
   const fetchNews = async (currentPage) => {
     try {
@@ -24,7 +29,8 @@ export const Main = () => {
       const response = await getNews({
         page_number: currentPage,
         page_size: pageSize,
-        category: selectedCategory === 'All' ? null : selectedCategory
+        category: selectedCategory === 'All' ? null : selectedCategory,
+        keywords: debouncedKeywords
       })
       setNews(response.news);
       setIsLoading(false)
@@ -35,20 +41,21 @@ export const Main = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await getCategories()
+      const response = await getCategories();
       setCategories(['All', ...response.categories]);
     } catch (error) {
       console.log(error);
     }
-  } 
+  }
+
+  useEffect(() => {
+    fetchNews(currentPage)
+  }, [currentPage, selectedCategory, debouncedKeywords])
 
   useEffect(() => {
     fetchCategories()
   }, [])
 
-  useEffect(() => {
-    fetchNews(currentPage)
-  }, [currentPage, selectedCategory])
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -71,8 +78,8 @@ export const Main = () => {
       <Categories
         categories={categories}
         selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory} /> 
-      
+        setSelectedCategory={setSelectedCategory} />
+
       {news.length > 0 && !isLoading ? <NewsBanner item={news[0]} /> : <Skeleton count={1} type='banner' />}
 
       <Pagination
@@ -81,9 +88,14 @@ export const Main = () => {
         handlePreviousPage={handlePreviousPage}
         handlePageClick={handlePageClick}
         currentPage={currentPage} />
+
+      <Search
+        keywords={keywords}
+        setKeywords={setKeywords} />
+
       {!isLoading ?
         <NewsList news={news} /> :
-        <Skeleton count={15} type='item' /> 
+        <Skeleton count={10} type='item' /> 
       }
       <Pagination
         totalPages={totalPages}
