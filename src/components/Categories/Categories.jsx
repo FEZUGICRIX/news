@@ -1,19 +1,21 @@
 import style from './styles.module.css';
 
-const Categories = ({ categories, setSelectedCategory, selectedCategory }) => {
+const Categories = ({ categories, selectedCategory, setSelectedCategory }) => {
   return (
     <div className={style.categories}>
-      {categories.map(category => 
-        <button key={category}
-          onClick={() => setSelectedCategory(category)}
-          className={
-            category === selectedCategory ? style.active : style.item
-          }>
-          {category}
-        </button>
-      )}
+      {categories.map((category) => {
+        return (
+          <button
+            key={category}
+            className={category === selectedCategory && style.active}
+            onClick={() => setSelectedCategory(category)}
+          >
+            {category}
+          </button>
+        );
+      })}
     </div>
   );
 }
 
-export default Categories
+export default Categories;
